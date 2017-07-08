@@ -8,7 +8,7 @@ import (
 const (
 	SynchByteLen  = 7
 	NormalByteLen = 8
-	BytePerInt    = 4
+	BytesPerInt   = 4
 )
 
 func ID3Version(f *os.File) (int, error) {
@@ -39,11 +39,11 @@ func BitSet(fl, index byte) bool {
 	return fl%(1<<index) != 0
 }
 
-func ByteInt(buff []byte, base uint) (i uint32, err error) {
+func BytesToInt(buff []byte, base uint) (i uint32, err error) {
 	/*
 		Converts synch safe int into normal int
 	*/
-	if len(buff) > BytePerInt {
+	if len(buff) > BytesPerInt {
 		err = errors.New("Bytes : Invalid []byte length")
 		return
 	}
