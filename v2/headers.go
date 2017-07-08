@@ -6,11 +6,6 @@ import (
 	"github.com/makebyte/mutago"
 )
 
-const (
-	HeaderSize  = 10
-	SynchIntLen = 7
-)
-
 type Header struct {
 	Identifier   []byte // 3 bytes indicating ID3
 	Version      []byte // 2 bytes
@@ -39,7 +34,7 @@ func ParseHeader(reader io.ReadSeeker) *Header {
 		Flags:      data[5],
 	}
 
-	size, err := mutago.ByteInt(data[6:], SynchIntLen)
+	size, err := mutago.BytesToInt(data[6:], SynchIntLen)
 	if err != nil {
 		return nil
 	}
