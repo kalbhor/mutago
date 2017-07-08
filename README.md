@@ -1,11 +1,8 @@
-# Mutago 
-> ### Simple ID3 tagger for Go 
+# Mutago
+> ### Simple ID3 tagger for Go
 
 
 ## License
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/LGPLv3_Logo.svg/1200px-LGPLv3_Logo.svg.png" alt="license" height="40%" width="40%">
-
-
-
-
+<a href="https://github.com/makebyte/mutago/blob/master/LICENSE" target="_blank">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/License_icon-bsd.svg/256px-License_icon-bsd.svg.png" alt="license" height="20%" width="20%">
+</a>
