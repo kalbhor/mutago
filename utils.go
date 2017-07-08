@@ -5,12 +5,6 @@ import (
 	"os"
 )
 
-const (
-	SynchByteLen  = 7
-	NormalByteLen = 8
-	BytesPerInt   = 4
-)
-
 func ID3Version(f *os.File) (int, error) {
 	/*
 		Returns ID3 version.
@@ -29,32 +23,4 @@ func ID3Version(f *os.File) (int, error) {
 		return 2, nil // ID3v2 has 'ID3' in first 3 bytes
 	}
 	return 0, errors.New("ID3 Tags : None found")
-}
-
-func BitSet(fl, index byte) bool {
-	/*
-		Tells whether a bit is set or not
-	*/
-
-	return fl%(1<<index) != 0
-}
-
-func BytesToInt(buff []byte, base uint) (i uint32, err error) {
-	/*
-		Converts synch safe int into normal int
-	*/
-	if len(buff) > BytesPerInt {
-		err = errors.New("Bytes : Invalid []byte length")
-		return
-	}
-
-	for _, b := range buff {
-		if base < NormalByteLen && b >= (1<<base) {
-			err = errors.New("Int : Exceeded max bit")
-			return
-		}
-
-		i = (i << base) | uint32(b)
-	}
-	return
 }

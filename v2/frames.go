@@ -2,8 +2,6 @@ package v2
 
 import (
 	"io"
-
-	"github.com/makebyte/mutago"
 )
 
 type Frame struct {
@@ -28,7 +26,7 @@ func ParseFrame(reader io.ReadSeeker) *Frame {
 		Flags: header[8:],
 	}
 
-	size, err := mutago.BytesToInt(header[4:8], SynchIntLen)
+	size, err := BytesToInt(header[4:8], SynchIntLen)
 	if err != nil {
 		return nil
 	}

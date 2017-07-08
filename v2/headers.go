@@ -2,8 +2,6 @@ package v2
 
 import (
 	"io"
-
-	"github.com/makebyte/mutago"
 )
 
 type Header struct {
@@ -34,15 +32,15 @@ func ParseHeader(reader io.ReadSeeker) *Header {
 		Flags:      data[5],
 	}
 
-	size, err := mutago.BytesToInt(data[6:], SynchIntLen)
+	size, err := BytesToInt(data[6:], SynchIntLen)
 	if err != nil {
 		return nil
 	}
 
 	header.Size = size
-	header.Unsynch = mutago.BitSet(header.Flags, 7)
-	header.Extended = mutago.BitSet(header.Flags, 6)
-	header.Experimental = mutago.BitSet(header.Flags, 5)
+	header.Unsynch = BitSet(header.Flags, 7)
+	header.Extended = BitSet(header.Flags, 6)
+	header.Experimental = BitSet(header.Flags, 5)
 
 	return header
 }
