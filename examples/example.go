@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"./v2"
+	"github.com/makebyte/mutago/v2"
 )
 
 func main() {
