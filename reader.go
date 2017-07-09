@@ -13,17 +13,38 @@ type Metadata struct {
 }
 
 func (m Metadata) Get(tag string) (string, error) {
+	/*
+		Returns the value of a tag
+		eg : TALB -> Album name
+	*/
 	if val, check := m.tags[tag]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find tag")
 }
 
+func (m Metadata) List() (list []string) {
+	/*
+		Provides a list of available tags
+		in a file
+	*/
+	for key, _ := range m.tags {
+		list = append(list, key)
+	}
+	return
+}
+
 func (m Metadata) Close() {
+	/*
+		Close the file
+	*/
 	defer m.file.Close()
 }
 
 func Open(file string) (*Metadata, error) {
+	/*
+		Open file and parse tags
+	*/
 	f, err := os.Open(file)
 	if err != nil {
 		return nil, err
@@ -34,6 +55,7 @@ func Open(file string) (*Metadata, error) {
 	}
 	metadata := &Metadata{}
 	tags := make(map[string]string)
+
 	switch version {
 
 	case 1:
