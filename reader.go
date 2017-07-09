@@ -12,6 +12,24 @@ type Metadata struct {
 	tags map[string]string // tags and their values
 }
 
+func (m Metadata) Title() (string, error) {
+	if val, check := m.tags["TIT2"]; check {
+		return val, nil
+	}
+	return "", errors.New("Tag Error : Could not find title (TIT2)")
+}
+func (m Metadata) Album() (string, error) {
+	if val, check := m.tags["TALB"]; check {
+		return val, nil
+	}
+	return "", errors.New("Tag Error : Could not find album (TALB)")
+}
+func (m Metadata) Artist() (string, error) {
+	if val, check := m.tags["TPE1"]; check {
+		return val, nil
+	}
+	return "", errors.New("Tag Error : Could not find artist (TPE1)")
+}
 func (m Metadata) Get(tag string) (string, error) {
 	/*
 		Returns the value of a tag
