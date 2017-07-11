@@ -2,6 +2,30 @@
     <img src="http://i.imgur.com/kwWL7ZG.png" width="800">    
 </p>
 
+<p align="center">
+
+<a href="https://goreportcard.com/report/github.com/makebyte/mutago" target="_blank">
+<img src="https://goreportcard.com/badge/github.com/makebyte/mutago" alt=“goreport”>
+</a>
+
+<!--
+<a href="https://github.com/makebyte/mutago/blob/master/LICENSE" target="_blank">
+<img src="https://img.shields.io/pypi/l/Django.svg" alt="travis">
+</a>
+-->
+
+
+<a href="https://gitter.im/makebyte/mutago" target="_blank">
+<img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" alt="gitter">
+</a>
+
+<a href="https://saythanks.io/to/kalbhor" target="_blank">
+<img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg" alt="saythanks">
+</a>
+
+</p>
+
+
 ## Features
 
 - *Allows reading and writing of ID3 tags*
@@ -81,9 +105,8 @@ Will be added soon.
 
 
 ## License
-<a href="https://github.com/makebyte/mutago/blob/master/LICENSE" target="_blank">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/License_icon-bsd.svg/256px-License_icon-bsd.svg.png" alt="license" height="10%" width="10%">
-</a>
+
+[![PyPI](https://img.shields.io/pypi/l/Django.svg)](https://github.com/makebyte/mutago/blob/master/LICENSE)
 
 ```
 
@@ -98,6 +121,5 @@ Redistribution and use in source and binary forms, with or without modification,
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 ```
