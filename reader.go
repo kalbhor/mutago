@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/makebyte/mutago/v2"
+
+	"github.com/makebyte/mutago/v1"
 )
 
 type Metadata struct {
@@ -46,7 +48,7 @@ func (m Metadata) List() (list []string) {
 		Provides a list of available tags
 		in a file
 	*/
-	for key, _ := range m.tags {
+	for key := range m.tags {
 		list = append(list, key)
 	}
 	return
@@ -77,6 +79,11 @@ func Open(file string) (*Metadata, error) {
 	switch version {
 
 	case 1:
+		tags, err = v1.Parse(f)
+		if err != nil {
+			return nil, err
+		}
+
 		// ** ID3 version 1 implementation pending **
 	case 2:
 		header := v2.ParseHeader(f)
