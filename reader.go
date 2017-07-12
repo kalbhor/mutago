@@ -107,6 +107,9 @@ func Open(file string) (*Metadata, error) {
 
 		for pos <= int64(header.Size) { // Iterate over all ID3 frames
 			frame := v2.ParseFrame(metadata.file)
+			if frame.Size == 0 {
+				break
+			}
 			tags[frame.ID] = frame.Info
 			pos, _ = metadata.file.Seek(0, 1)
 		}
