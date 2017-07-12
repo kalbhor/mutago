@@ -10,7 +10,7 @@ import (
 )
 
 type Metadata struct {
-	file os.File           // The file containing tags
+	file *os.File          // The file containing tags
 	tags map[string]string // tags and their values
 }
 
@@ -20,18 +20,29 @@ func (m Metadata) Title() (string, error) {
 	}
 	return "", errors.New("Tag Error : Could not find title (TIT2)")
 }
+
 func (m Metadata) Album() (string, error) {
 	if val, check := m.tags["TALB"]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find album (TALB)")
 }
+
 func (m Metadata) Artist() (string, error) {
 	if val, check := m.tags["TPE1"]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find artist (TPE1)")
 }
+
+func (m Metadata) Albumart() *v2.Albumart {
+	/*
+	   Returns the image in byte array
+	*/
+	albumart := v2.ParseAlbumart(m.tags["APIC"])
+	return albumart
+}
+
 func (m Metadata) Get(tag string) (string, error) {
 	/*
 		Returns the value of a tag
@@ -58,6 +69,8 @@ func (m Metadata) Close() {
 	/*
 		Close the file
 	*/
+
+	// Pending : Cleanup after writing to file
 	defer m.file.Close()
 }
 
@@ -69,30 +82,33 @@ func Open(file string) (*Metadata, error) {
 	if err != nil {
 		return nil, err
 	}
-	version, err := ID3Version(f)
+	metadata := &Metadata{}
+	metadata.file = f
+	tags := make(map[string]string)
+
+	version, err := ID3Version(metadata.file)
 	if err != nil {
 		return nil, err
 	}
-	metadata := &Metadata{}
-	tags := make(map[string]string)
-
 	switch version {
 
-	case 1:
-		tags, err = v1.Parse(f)
+	case 0: // No metadata (or invalid metadata)
+		return nil, nil
+
+	case 1: // ID3v1
+		tags, err = v1.Parse(metadata.file)
 		if err != nil {
 			return nil, err
 		}
 
-		// ** ID3 version 1 implementation pending **
-	case 2:
-		header := v2.ParseHeader(f)
+	case 2: // ID3v2
+		header := v2.ParseHeader(metadata.file)
 		pos := int64(v2.HeaderSize)
 
 		for pos <= int64(header.Size) { // Iterate over all ID3 frames
-			frame := v2.ParseFrame(f)
+			frame := v2.ParseFrame(metadata.file)
 			tags[frame.ID] = frame.Info
-			pos, _ = f.Seek(0, 1)
+			pos, _ = metadata.file.Seek(0, 1)
 		}
 
 		metadata.tags = tags
