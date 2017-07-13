@@ -35,12 +35,15 @@ func (m Metadata) Artist() (string, error) {
 	return "", errors.New("Tag Error : Could not find artist (TPE1)")
 }
 
-func (m Metadata) Albumart() *v2.Albumart {
+func (m Metadata) Albumart() (*v2.Albumart, error) {
 	/*
 	   Returns the image in byte array
 	*/
-	albumart := v2.ParseAlbumart(m.tags["APIC"])
-	return albumart
+	albumart, err := v2.ParseAlbumart(m.tags["APIC"])
+	if err != nil {
+		return albumart, err
+	}
+	return albumart, nil
 }
 
 func (m Metadata) Get(tag string) (string, error) {
@@ -106,8 +109,8 @@ func Open(file string) (*Metadata, error) {
 		pos := int64(v2.HeaderSize)
 
 		for pos <= int64(header.Size) { // Iterate over all ID3 frames
-			frame := v2.ParseFrame(metadata.file)
-			if frame.Size == 0 {
+			frame, err := v2.ParseFrame(metadata.file)
+			if frame.Size == 0 || err != nil {
 				break
 			}
 			tags[frame.ID] = frame.Info

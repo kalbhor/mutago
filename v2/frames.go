@@ -1,6 +1,7 @@
 package v2
 
 import (
+	"errors"
 	"io"
 )
 
@@ -24,7 +25,7 @@ type Albumart struct {
 	Data         []byte
 }
 
-func ParseFrame(reader io.ReadSeeker) *Frame {
+func ParseFrame(reader io.ReadSeeker) (*Frame, error) {
 
 	header := make([]byte, FrameHeaderSize)
 	io.ReadFull(reader, header)
@@ -36,7 +37,7 @@ func ParseFrame(reader io.ReadSeeker) *Frame {
 
 	size, err := BytesToInt(header[4:8], SynchIntLen)
 	if err != nil {
-		return nil
+		return frame, err
 	}
 
 	frame.Size = size
@@ -46,13 +47,18 @@ func ParseFrame(reader io.ReadSeeker) *Frame {
 	io.ReadFull(reader, info)
 	frame.Info = string(info)
 
-	return frame
+	return frame, nil
 }
 
-func ParseAlbumart(info string) *Albumart {
+func ParseAlbumart(info string) (*Albumart, error) {
 	/*
 	   Returns the image in byte array, the image type and error
 	*/
+
+	if len(info) == 0 {
+		return nil, errors.New("Tag error : No bytes to parse")
+
+	}
 
 	var null byte = 0
 	data := []byte(info)
@@ -84,5 +90,5 @@ func ParseAlbumart(info string) *Albumart {
 
 	albumart.Data = data
 
-	return albumart
+	return albumart, nil
 }
