@@ -1,8 +1,7 @@
-package v1
+package v2
 
 import (
 	"fmt"
-	"io"
 	"os"
 )
 
@@ -22,23 +21,17 @@ func New(f *os.File) *Metadata {
 
 // Parse loads all the available id3 tags into the metadata tags map.
 func (m *Metadata) Parse() error {
-	if _, err := m.file.Seek(-id3v1Block, io.SeekEnd); err != nil {
-		return fmt.Errorf("could not seek last %d bytes : %w", id3v1Block, err)
-	}
+	header := parseHeader(m.file)
+	pos := int64(HeaderSize)
 
-	data := make([]byte, id3v1Block)
-	_, err := io.ReadFull(m.file, data)
-	if err != nil {
-		return fmt.Errorf("could not read last %d bytes : %w", id3v1Block, err)
-	}
-
-	m.tags["TIT2"] = string(data[3:33])   //TITLE
-	m.tags["TPE1"] = string(data[33:63])  //ARTIST
-	m.tags["TALB"] = string(data[63:93])  //ALBUM
-	m.tags["TYER"] = string(data[93:97])  //YEAR
-	m.tags["COMM"] = string(data[97:127]) //COMMENTS
-	if int(data[127]) < len(genres) {
-		m.tags["TCON"] = genres[int(data[127])] //GENRE
+	for pos <= int64(header.Size) {
+		// Iterate over all ID3 frames
+		frame, err := parseFrame(m.file)
+		if frame.Size == 0 || err != nil {
+			break
+		}
+		m.tags[frame.ID] = frame.Info
+		pos, _ = m.file.Seek(0, 1)
 	}
 
 	return nil

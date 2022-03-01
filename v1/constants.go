@@ -1,7 +1,13 @@
 package v1
 
-const id3v1Block = 128
+const (
+	id3v1Block = 128
+	tagSize    = 30
+)
 
+// This is the preset genres list included in id3v1.
+// ref: https://en.wikipedia.org/wiki/List_of_ID3v1_Genres
+// The order of this list matters.
 var genres = []string{
 	"Blues", "Classic Rock", "Country", "Dance",
 	"Disco", "Funk", "Grunge", "Hip-Hop",

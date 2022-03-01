@@ -4,7 +4,7 @@ import (
 	"io"
 )
 
-type Header struct {
+type header struct {
 	Identifier   []byte // 3 bytes indicating ID3
 	Version      []byte // 2 bytes
 	Flags        byte   // 1 byte
@@ -14,19 +14,18 @@ type Header struct {
 	Size         uint32 // Size of Tag (Excluding header)
 }
 
-type ExtendedHeader struct {
+type extendedHeader struct {
 	Size    uint32 // Size of extended tag (excluding header)
 	Flags   []byte // 2 bytes
 	Padding []byte // 4 bytes
 	CRC     bool   // first bit of flags
 }
 
-func ParseHeader(reader io.ReadSeeker) *Header {
-
+func parseHeader(reader io.ReadSeeker) *header {
 	data := make([]byte, HeaderSize)
 	io.ReadFull(reader, data)
 
-	header := &Header{
+	header := &header{
 		Identifier: data[:3],
 		Version:    data[3:5],
 		Flags:      data[5],
