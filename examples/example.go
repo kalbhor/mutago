@@ -7,8 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("\n")
-
 	m, err := mutago.Open("sample.mp3")
 	if err != nil {
 		panic(err)
@@ -32,5 +30,4 @@ func main() {
 	fmt.Println("Song title :", title)
 	fmt.Println("Song album : ", album)
 	fmt.Println("Song artist : ", artist)
-
 }

@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-type Frame struct {
+type frame struct {
 	ID    string // 4 characters
 	Size  uint32 // 4 bytes
 	Flags []byte // 2 bytes
@@ -25,12 +25,12 @@ type Albumart struct {
 	Data         []byte
 }
 
-func ParseFrame(reader io.ReadSeeker) (*Frame, error) {
+func parseFrame(reader io.ReadSeeker) (*frame, error) {
 
 	header := make([]byte, FrameHeaderSize)
 	io.ReadFull(reader, header)
 
-	frame := &Frame{
+	frame := &frame{
 		ID:    string(header[:4]),
 		Flags: header[8:],
 	}
