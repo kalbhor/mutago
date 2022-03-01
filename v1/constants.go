@@ -1,5 +1,7 @@
 package v1
 
+const id3v1Block = 128
+
 var genres = []string{
 	"Blues", "Classic Rock", "Country", "Dance",
 	"Disco", "Funk", "Grunge", "Hip-Hop",
@@ -22,4 +24,3 @@ var genres = []string{
 	"Tribal", "Acid Punk", "Acid Jazz", "Polka",
 	"Retro", "Musical", "Rock & Roll", "Hard Rock",
 }
-

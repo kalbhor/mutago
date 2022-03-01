@@ -2,43 +2,81 @@ package mutago
 
 import (
 	"errors"
-	"os"
+	"fmt"
 
-	"github.com/makebyte/mutago/v2"
-
-	"github.com/makebyte/mutago/v1"
+	v1 "github.com/kalbhor/mutago/v1"
+	v2 "github.com/kalbhor/mutago/v2"
 )
 
-type Metadata struct {
-	file *os.File          // The file containing tags
-	tags map[string]string // tags and their values
+const (
+	id3v1Block = 128
+	id3v1      = 1
+	id3v2      = 2
+	vSize      = 3
+)
+
+// Parse() loads the metadats struct with the id3 tags.
+// It loads the tags based on the version.
+func (m *Metadata) Parse() error {
+	defer m.file.Close()
+	// Get the id3 version
+	v, err := m.Version()
+	if err != nil {
+		return fmt.Errorf("could not find appropriate version : %w", err)
+	}
+
+	// Based on the id3 version, parse the tags and load them inside the tags map.
+	switch v {
+	case id3v1:
+		tags, err := v1.Parse(m.file)
+		if err != nil {
+			return fmt.Errorf("could not load id3v1 tags : %w", err)
+		}
+		m.tags = tags
+	case id3v2:
+		header := v2.ParseHeader(m.file)
+		pos := int64(v2.HeaderSize)
+
+		for pos <= int64(header.Size) {
+			// Iterate over all ID3 frames
+			frame, err := v2.ParseFrame(m.file)
+			if frame.Size == 0 || err != nil {
+				break
+			}
+			m.tags[frame.ID] = frame.Info
+			pos, _ = m.file.Seek(0, 1)
+		}
+	}
+
+	return nil
 }
 
-func (m Metadata) Title() (string, error) {
+// Title() returns the "TIT2" tag from the loaded tags.
+func (m *Metadata) Title() (string, error) {
 	if val, check := m.tags["TIT2"]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find title (TIT2)")
 }
 
-func (m Metadata) Album() (string, error) {
+// Album() returns the "TALB" tag from the loaded tags.
+func (m *Metadata) Album() (string, error) {
 	if val, check := m.tags["TALB"]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find album (TALB)")
 }
 
-func (m Metadata) Artist() (string, error) {
+// Artist() returns the "TPE1" tag from the loaded tags.
+func (m *Metadata) Artist() (string, error) {
 	if val, check := m.tags["TPE1"]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find artist (TPE1)")
 }
 
-func (m Metadata) Albumart() (*v2.Albumart, error) {
-	/*
-	   Returns the image in byte array
-	*/
+// Albumart() returns the "APIC" tag from the loaded tags.
+func (m *Metadata) Albumart() (*v2.Albumart, error) {
 	albumart, err := v2.ParseAlbumart(m.tags["APIC"])
 	if err != nil {
 		return albumart, err
@@ -46,80 +84,18 @@ func (m Metadata) Albumart() (*v2.Albumart, error) {
 	return albumart, nil
 }
 
-func (m Metadata) Get(tag string) (string, error) {
-	/*
-		Returns the value of a tag
-		eg : TALB -> Album name
-	*/
+// Get() returns an arbitrary tag from the loaded tags.
+func (m *Metadata) Get(tag string) (string, error) {
 	if val, check := m.tags[tag]; check {
 		return val, nil
 	}
 	return "", errors.New("Tag Error : Could not find tag")
 }
 
-func (m Metadata) List() (list []string) {
-	/*
-		Provides a list of available tags
-		in a file
-	*/
+// List() returns a list of all loaded tags.
+func (m *Metadata) List() (list []string) {
 	for key := range m.tags {
 		list = append(list, key)
 	}
 	return
-}
-
-func (m Metadata) Close() {
-	/*
-		Close the file
-	*/
-
-	// Pending : Cleanup after writing to file
-	defer m.file.Close()
-}
-
-func Open(file string) (*Metadata, error) {
-	/*
-		Open file and parse tags
-	*/
-	f, err := os.Open(file)
-	if err != nil {
-		return nil, err
-	}
-	metadata := &Metadata{}
-	metadata.file = f
-	tags := make(map[string]string)
-
-	version, err := ID3Version(metadata.file)
-	if err != nil {
-		return nil, err
-	}
-	switch version {
-
-	case 0: // No metadata (or invalid metadata)
-		return nil, nil
-
-	case 1: // ID3v1
-		tags, err = v1.Parse(metadata.file)
-		if err != nil {
-			return nil, err
-		}
-
-	case 2: // ID3v2
-		header := v2.ParseHeader(metadata.file)
-		pos := int64(v2.HeaderSize)
-
-		for pos <= int64(header.Size) { // Iterate over all ID3 frames
-			frame, err := v2.ParseFrame(metadata.file)
-			if frame.Size == 0 || err != nil {
-				break
-			}
-			tags[frame.ID] = frame.Info
-			pos, _ = metadata.file.Seek(0, 1)
-		}
-
-		metadata.tags = tags
-
-	}
-
-	return metadata, nil
 }
