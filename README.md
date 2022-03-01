@@ -1,55 +1,25 @@
-<p align="center">
-    <img src="http://i.imgur.com/kwWL7ZG.png" width="800">    
-</p>
-
-<p align="center">
-
-<a href="https://goreportcard.com/report/github.com/makebyte/mutago" target="_blank">
-<img src="https://goreportcard.com/badge/github.com/makebyte/mutago" alt=“goreport”>
-</a>
-
-<!--
-<a href="https://github.com/makebyte/mutago/blob/master/LICENSE" target="_blank">
-<img src="https://img.shields.io/pypi/l/Django.svg" alt="travis">
-</a>
--->
-
-
-<a href="https://gitter.im/makebyte/mutago" target="_blank">
-<img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" alt="gitter">
-</a>
-
-<a href="https://saythanks.io/to/kalbhor" target="_blank">
-<img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg" alt="saythanks">
-</a>
-
-</p>
-
 
 ## Features
 
 - *Allows reading and writing of ID3 tags*
 - *Works for both ID3v1 and ID3v2 (2.3, and in most cases 2.4)*
 - *Extremely simple to use. Abstracts the complicated parts*
-- *Simple yet powerful; Allows advanced usage if required*
 
 ## Installation
 
-##### Installs in your $GOPATH
-
 ```sh
-go get github.com/makebyte/mutago
+go get github.com/kalbhor/mutago
 ```
 
 ## Usage
 
 ```go
 import (
-"github.com/makebyte/mutago"
+"github.com/kalbhor/mutago"
 )
 ```
 
-Note : The [examples](https://github.com/makebyte/mutago/tree/master/examples) folder contains implementations of all the methods below.
+Note : The [examples](https://github.com/makebyte/mutago/tree/master/examples) folder contains implementations of all the methods below. It uses a sample mp3 file licensed under creative commons.
 
 ### Read methods
 
@@ -111,7 +81,7 @@ Will be added soon.
 ```
 
 The BSD 2-Clause License
-Copyright © 2017 MakeByte
+Copyright © 2022 Lakshay Kalbhor
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
